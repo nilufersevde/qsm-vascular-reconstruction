@@ -2,35 +2,66 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from qsm_vascular.dipole import create_dipole_kernel
+from qsm_vascular.dipole import dipole_forward
+from qsm_vascular.phantoms import create_cylindrical_phantom
 
 # Simulation parameters
 N = 64
 voxel_size = 1.0  # mm
 
-# Generate the dipole kernel using our reusable function
-D = create_dipole_kernel(N=N, voxel_size=voxel_size)
-
-# Extract the kx-kz plane (ky = 0)
-D_slice = D[:, 0, :]
-
-# Shift zero frequency to the center for visualization
-D_slice_shifted = np.fft.fftshift(D_slice)
-
-plt.figure(figsize=(6, 5))
-
-plt.imshow(
-    D_slice_shifted,
-    cmap="seismic",
-    vmin=-2/3,
-    vmax=2/3,
-    origin="lower"
+# Generate the susceptibility phantom
+chi = create_cylindrical_phantom(
+    N=N,
+    voxel_size=voxel_size,
+    radius=5.0,
+    chi_vessel=0.4
 )
 
-plt.colorbar(label="Dipole kernel D")
-plt.xlabel("kz frequency index")
-plt.ylabel("kx frequency index")
-plt.title("Dipole kernel in the kx-kz plane (ky = 0)")
+b = dipole_forward(chi, voxel_size=voxel_size)
+
+# Expected field for a z-aligned cylindrical vessel
+b_expected = (chi - chi.mean()) / 3
+# Compare numerical and expected fields
+error = np.abs(b - b_expected)
+
+print("Maximum absolute error:", error.max())
+
+
+# Visualize susceptibility and simulated local field
+z_center = N // 2
+
+chi_slice = chi[:, :, z_center]
+b_slice = b[:, :, z_center]
+
+fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+
+# Susceptibility phantom
+im1 = axes[0].imshow(
+    chi_slice,
+    cmap="gray",
+    origin="lower",
+    vmin=0,
+    vmax=0.4
+)
+
+axes[0].set_title("Susceptibility phantom")
+axes[0].set_xlabel("Y voxel index")
+axes[0].set_ylabel("X voxel index")
+fig.colorbar(im1, ax=axes[0], label="Susceptibility (ppm)")
+
+# Simulated magnetic field
+im2 = axes[1].imshow(
+    b_slice,
+    cmap="seismic",
+    origin="lower",
+    vmin=-0.14,
+    vmax=0.14
+)
+
+axes[1].set_title("Simulated local field")
+axes[1].set_xlabel("Y voxel index")
+axes[1].set_ylabel("X voxel index")
+fig.colorbar(im2, ax=axes[1], label="Field shift (ppm)")
 
 plt.tight_layout()
 plt.show()
