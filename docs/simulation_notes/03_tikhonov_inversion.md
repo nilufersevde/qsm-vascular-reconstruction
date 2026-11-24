@@ -54,7 +54,7 @@ Our discrete implementation sets $D(\mathbf{0})=0$. Direct inversion by dividing
 Instead of direct inversion, we minimize
 
 ```math
-\chi_\lambda = \underset{\chi}{\operatorname{arg\,min}}\left(\|A\chi-b\|_2^2+\lambda\|\chi\|_2^2\right),
+\chi_\lambda = \underset{\chi}{\mathrm{arg\,min}}\left(\|A\chi-b\|_2^2+\lambda\|\chi\|_2^2\right).
 ```
 
 where $A$ is the dipole forward operator, $b$ is the given field, and $\lambda>0$ controls regularization.
@@ -123,7 +123,11 @@ background_mask = ~vessel_mask
 The contrast is
 
 ```math
-\Delta\chi_{\mathrm{recon}}=\operatorname{mean}(\chi_{\mathrm{recon}}\text{ in vessel})-\operatorname{mean}(\chi_{\mathrm{recon}}\text{ in background}).
+\Delta\chi_{\mathrm{recon}}
+=
+\mathrm{mean}(\chi_{\mathrm{recon,vessel}})
+-
+\mathrm{mean}(\chi_{\mathrm{recon,background}}).
 ```
 
 The true contrast is $0.4-0=0.4$ ppm. We compute
