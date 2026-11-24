@@ -4,9 +4,9 @@
 
 The local magnetic field perturbation is related to the magnetic susceptibility distribution through
 
-$$
+```math
 \hat{b}(\mathbf{k}) = D(\mathbf{k})\hat{\chi}(\mathbf{k})
-$$
+```
 
 where:
 
@@ -19,12 +19,12 @@ where:
 
 For $B_0$ aligned with the z-axis, the dipole kernel is
 
-$$
+```math
 D(\mathbf{k}) =
 \frac{1}{3}
 -
 \frac{k_z^2}{k_x^2+k_y^2+k_z^2}
-$$
+```
 
 for nonzero frequency vectors.
 
@@ -34,13 +34,13 @@ The zero-frequency component represents the spatially constant component of susc
 
 Any susceptibility distribution can be decomposed as
 
-$$
+```math
 \chi(\mathbf{r})
 =
 \overline{\chi}
 +
 \left(\chi(\mathbf{r})-\overline{\chi}\right)
-$$
+```
 
 where $\overline{\chi}$ is the mean susceptibility across the simulated volume.
 
@@ -48,11 +48,11 @@ The first term is constant everywhere. The second term describes variations arou
 
 With NumPy's default FFT convention,
 
-$$
+```math
 \hat{\chi}(\mathbf{0})
 =
 N_xN_yN_z\overline{\chi}
-$$
+```
 
 where $N_x$, $N_y$, and $N_z$ are the number of voxels along the three spatial axes.
 
@@ -62,9 +62,9 @@ The dipole-kernel formula is undefined at $\mathbf{k}=\mathbf{0}$ because both t
 
 In our discrete QSM forward model, we define
 
-$$
+```math
 D(\mathbf{0})=0
-$$
+```
 
 Consequently, the constant susceptibility component contributes nothing to the simulated local field, and the simulated field has zero spatial mean.
 
@@ -80,15 +80,15 @@ Because susceptibility does not vary along z, its Fourier coefficients are zero 
 
 For nonzero frequency vectors with $k_z=0$,
 
-$$
+```math
 D(k_x,k_y,0)=\frac{1}{3}
-$$
+```
 
 The constant susceptibility component is removed because $D(\mathbf{0})=0$.
 
 Therefore, the simulated local field satisfies
 
-$$
+```math
 \boxed{
 b(\mathbf{r})
 =
@@ -97,7 +97,7 @@ b(\mathbf{r})
 \chi(\mathbf{r})-\overline{\chi}
 \right)
 }
-$$
+```
 
 This relationship is specific to our z-invariant phantom and periodic FFT forward model. It does not generally hold for arbitrary vessel orientations or finite-length cylinders.
 
@@ -130,30 +130,30 @@ b = np.fft.ifftn(b_hat).real
 
 For the z-invariant cylindrical phantom, the expected local field is
 
-$$
+```math
 b_{\mathrm{expected}}(\mathbf{r})
 =
 \frac{\chi(\mathbf{r})-\overline{\chi}}{3}
-$$
+```
 
 The maximum absolute difference was calculated as
 
-$$
+```math
 E_{\max}
 =
 \max_{\mathbf{r}}
 \left|
 b(\mathbf{r})-b_{\mathrm{expected}}(\mathbf{r})
 \right|
-$$
+```
 
 The observed result was
 
-$$
+```math
 E_{\max}
 =
 5.551115123125783\times10^{-17}\ \mathrm{ppm}
-$$
+```
 
 The agreement is consistent with floating-point precision and supports the numerical correctness of the implementation for this particular test case.
 

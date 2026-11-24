@@ -30,9 +30,9 @@ The vessel susceptibility value is an illustrative simulation setting, not a pat
 
 The Fourier-domain dipole forward model is
 
-$$
+```math
 \hat{b}(\mathbf{k}) = D(\mathbf{k})\hat{\chi}(\mathbf{k}).
-$$
+```
 
 Here:
 
@@ -43,9 +43,9 @@ Here:
 
 For nonzero frequencies,
 
-$$
+```math
 D(\mathbf{k})=\frac{1}{3}-\frac{k_z^2}{k_x^2+k_y^2+k_z^2}.
-$$
+```
 
 Our discrete implementation sets $D(\mathbf{0})=0$. Direct inversion by dividing by $D$ is unstable near the kernel's zeros.
 
@@ -53,9 +53,9 @@ Our discrete implementation sets $D(\mathbf{0})=0$. Direct inversion by dividing
 
 Instead of direct inversion, we minimize
 
-$$
+```math
 \chi_\lambda = \underset{\chi}{\operatorname{arg\,min}}\left(\|A\chi-b\|_2^2+\lambda\|\chi\|_2^2\right),
-$$
+```
 
 where $A$ is the dipole forward operator, $b$ is the given field, and $\lambda>0$ controls regularization.
 
@@ -65,9 +65,9 @@ where $A$ is the dipole forward operator, $b$ is the given field, and $\lambda>0
 
 For this Fourier-diagonal forward operator, the solution is
 
-$$
+```math
 \boxed{\hat{\chi}_\lambda(\mathbf{k})=\frac{D(\mathbf{k})}{D(\mathbf{k})^2+\lambda}\hat{b}(\mathbf{k})}.
-$$
+```
 
 The denominator stays positive for $\lambda>0$, avoiding division by zero.
 
@@ -75,15 +75,15 @@ The denominator stays positive for $\lambda>0$, avoiding division by zero.
 
 In our noise-free simulation,
 
-$$
+```math
 \hat{b}(\mathbf{k})=D(\mathbf{k})\hat{\chi}_{\mathrm{true}}(\mathbf{k}).
-$$
+```
 
 Substituting this into the Tikhonov solution gives
 
-$$
+```math
 \hat{\chi}_\lambda(\mathbf{k}) = \underbrace{\frac{D(\mathbf{k})^2}{D(\mathbf{k})^2+\lambda}}_{H_\lambda(\mathbf{k})}\hat{\chi}_{\mathrm{true}}(\mathbf{k}).
-$$
+```
 
 $H_\lambda$ is the **retention or attenuation factor** for a susceptibility Fourier component. For $\lambda>0$, it lies between 0 and 1. Frequencies at which $D$ is small are suppressed more strongly.
 
@@ -91,21 +91,21 @@ $H_\lambda$ is the **retention or attenuation factor** for a susceptibility Four
 
 The idealized cylinder is unchanged along z. Its nonzero susceptibility Fourier coefficients therefore have $k_z=0$. At those frequencies, except at $\mathbf{k}=\mathbf{0}$,
 
-$$
+```math
 D=\frac{1}{3}.
-$$
+```
 
 Hence
 
-$$
+```math
 H_\lambda=\frac{1/9}{1/9+\lambda}=\boxed{\frac{1}{1+9\lambda}}.
-$$
+```
 
 The zero-frequency component is removed because $D(\mathbf{0})=0$. Transforming back to spatial coordinates therefore gives
 
-$$
+```math
 \boxed{\chi_\lambda(\mathbf{r})=\frac{\chi_{\mathrm{true}}(\mathbf{r})-\overline{\chi}_{\mathrm{true}}}{1+9\lambda}}.
-$$
+```
 
 This formula is specific to the z-invariant cylinder and the chosen discrete periodic FFT model. It is not a general Tikhonov reconstruction formula for tilted or finite vessels.
 
@@ -122,25 +122,25 @@ background_mask = ~vessel_mask
 
 The contrast is
 
-$$
+```math
 \Delta\chi_{\mathrm{recon}}=\operatorname{mean}(\chi_{\mathrm{recon}}\text{ in vessel})-\operatorname{mean}(\chi_{\mathrm{recon}}\text{ in background}).
-$$
+```
 
 The true contrast is $0.4-0=0.4$ ppm. We compute
 
-$$
+```math
 \mathrm{Bias}=\Delta\chi_{\mathrm{recon}}-\Delta\chi_{\mathrm{true}},
-$$
+```
 
-$$
+```math
 \mathrm{Relative\ bias}=100\times\frac{\mathrm{Bias}}{\Delta\chi_{\mathrm{true}}}\%.
-$$
+```
 
 For our z-invariant phantom, the predicted reconstructed contrast is
 
-$$
+```math
 \boxed{\Delta\chi_{\mathrm{recon}}=\frac{0.4}{1+9\lambda}\ \mathrm{ppm}}.
-$$
+```
 
 ## 7. Observed numerical results
 

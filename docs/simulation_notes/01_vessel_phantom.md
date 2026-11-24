@@ -60,13 +60,13 @@ The `indexing="ij"` argument ensures that array dimensions correspond directly t
 
 The vessel is modeled as a cylinder with a circular cross-section. Its susceptibility distribution is defined as
 
-$$
+```math
 \chi(x,y,z) =
 \begin{cases}
 \chi_{\mathrm{vessel}}, & x^2+y^2 \leq R^2, \\
 \chi_{\mathrm{background}}, & x^2+y^2 > R^2.
 \end{cases}
-$$
+```
 
 where:
 
@@ -78,15 +78,15 @@ where:
 
 For our simulation,
 
-$$
+```math
 R = 5\ \mathrm{mm}
-$$
+```
 
 and the vessel mask satisfies
 
-$$
+```math
 x^2+y^2 \leq 25\ \mathrm{mm}^2.
-$$
+```
 
 Notice that the condition does not depend on $z$. Therefore, the vessel extends through the entire simulated volume along the z-axis.
 
@@ -139,9 +139,9 @@ This creates a two-dimensional Boolean mask. Each position is assigned:
 
 The circle is determined by
 
-$$
+```math
 x^2+y^2\leq R^2.
-$$
+```
 
 ### 5.2 Extending the mask along z
 
@@ -210,22 +210,22 @@ The vessel occupies approximately 1.98% of the simulated volume.
 
 The mean susceptibility is
 
-$$
+```math
 \overline{\chi}
 =
 \frac{1}{N_xN_yN_z}
 \sum_{i,j,k}\chi_{ijk}.
-$$
+```
 
 For the present phantom,
 
-$$
+```math
 \overline{\chi}
 =
 \frac{5184\times0.4}{64^3}
 =
 0.00791015625\ \mathrm{ppm}.
-$$
+```
 
 This mean value later becomes important when validating the dipole forward simulation.
 
@@ -248,11 +248,11 @@ The voxelized circular boundary approximates the ideal continuous cylindrical ge
 
 The susceptibility phantom is the input to the dipole forward model:
 
-$$
+```math
 \hat{b}(\mathbf{k})
 =
 D(\mathbf{k})\hat{\chi}(\mathbf{k}).
-$$
+```
 
 Here, $\chi$ is the known susceptibility distribution, while $b$ is the simulated local magnetic field perturbation normalized by $B_0$.
 
