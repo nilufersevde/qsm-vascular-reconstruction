@@ -1,4 +1,3 @@
-
 # Dipole Forward Simulation — Implementation and Validation Notes
 
 ## 1. Fourier-domain forward model
