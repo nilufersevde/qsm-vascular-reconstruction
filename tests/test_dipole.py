@@ -9,7 +9,7 @@ from qsm_vascular.phantoms import create_cylindrical_phantom
 
 
 def test_dipole_kernel_origin():
-    D = create_dipole_kernel(N=64, voxel_size=1.0)
+    D = create_dipole_kernel(shape=(64, 64, 64), voxel_size=1.0)
 
     assert D[0, 0, 0] == 0.0
 
@@ -40,3 +40,12 @@ def test_forward_parallel_cylinder():
         atol=1e-12,
         rtol=0,
     )
+
+def test_non_cubic_kernel():
+    D = create_dipole_kernel(
+        shape=(64, 48, 32),
+        voxel_size=1.0
+    )
+
+    assert D.shape == (64, 48, 32)
+    assert D[0, 0, 0] == 0.0

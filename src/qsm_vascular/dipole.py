@@ -1,23 +1,30 @@
+
 import numpy as np
 
 
-def create_dipole_kernel(N=64, voxel_size=1.0):
-    """Create a 3D Fourier-space dipole kernel for B0 along z."""
+def create_dipole_kernel(shape, voxel_size=1.0):
+    Nx, Ny, Nz = shape
 
-    kx = np.fft.fftfreq(N, d=voxel_size)
-    ky = np.fft.fftfreq(N, d=voxel_size)
-    kz = np.fft.fftfreq(N, d=voxel_size)
+    kx = np.fft.fftfreq(Nx, d=voxel_size)
+    ky = np.fft.fftfreq(Ny, d=voxel_size)
+    kz = np.fft.fftfreq(Nz, d=voxel_size)
 
-    KX, KY, KZ = np.meshgrid(kx, ky, kz, indexing="ij")
+    KX, KY, KZ = np.meshgrid(
+        kx, ky, kz, indexing="ij"
+    )
 
     K2 = KX**2 + KY**2 + KZ**2
 
-    D = np.zeros_like(K2)
+    D = np.zeros(shape, dtype=float)
 
     mask = K2 != 0
-    D[mask] = 1/3 - KZ[mask]**2 / K2[mask]
+
+    D[mask] = (
+        1 / 3 - KZ[mask]**2 / K2[mask]
+    )
 
     return D
+
 
 
 
@@ -38,11 +45,9 @@ def dipole_forward(chi, voxel_size=1.0):
         Simulated normalized local field in ppm.
     """
 
-    N = chi.shape[0]
-
     D = create_dipole_kernel(
-        N=N,
-        voxel_size=voxel_size
+    shape=chi.shape,
+    voxel_size=voxel_size
     )
 
     chi_hat = np.fft.fftn(chi)
